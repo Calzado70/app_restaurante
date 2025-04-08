@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private void verificarCedula(String cedula) {
         // Configurar Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.22:3000/") // IP de tu PC
+                .baseUrl("http://192.168.0.22:8000/") // IP de tu PC
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
