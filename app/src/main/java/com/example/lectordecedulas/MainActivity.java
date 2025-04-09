@@ -1,16 +1,19 @@
 package com.example.lectordecedulas;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.lectordecedulas.ApiService;
-import com.example.lectordecedulas.R;
-import com.example.lectordecedulas.Respuesta;
-
+import androidx.core.content.FileProvider;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         cedulaInput = findViewById(R.id.cedulaInput);
         Button verifyButton = findViewById(R.id.verifyButton);
+        Button reportButton = findViewById(R.id.reportButton);
         resultText = findViewById(R.id.resultText);
 
         verifyButton.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +47,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Opcional: Detectar cuando el lector termina de ingresar (si envía un "Enter")
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                descargarYEnviarReporte();
+            }
+        });
+
         cedulaInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, android.view.KeyEvent event) {
@@ -61,9 +71,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void verificarCedula(String cedula) {
-        // Configurar Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.22:3000/") // IP de tu PC
+                .baseUrl("http://192.168.0.22:8000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -77,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     Respuesta respuesta = response.body();
                     if (respuesta != null) {
                         resultText.setText(respuesta.getMensaje());
-                        cedulaInput.setText(""); // Limpiar el campo
+                        cedulaInput.setText("");
                     }
                 } else {
                     resultText.setText("Error al conectar con el servidor");
@@ -86,6 +95,67 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Respuesta> call, Throwable t) {
+                resultText.setText("Error de conexión: " + t.getMessage());
+            }
+        });
+    }
+
+    private void descargarYEnviarReporte() {
+        resultText.setText("Descargando reporte...");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.0.22:8000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<ResponseBody> call = apiService.descargarReporte();
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        // Guardar el archivo en el directorio raíz de getExternalFilesDir
+                        File dir = getExternalFilesDir(null); // Sin subcarpeta
+                        if (dir == null || !dir.exists()) {
+                            dir.mkdirs(); // Crear directorio si no existe
+                        }
+                        File file = new File(dir, "reporte_almuerzos_completo.xlsx");
+
+                        // Escribir el archivo
+                        FileOutputStream fos = new FileOutputStream(file);
+                        fos.write(response.body().bytes());
+                        fos.flush();
+                        fos.close();
+
+                        resultText.setText("Reporte descargado: " + file.getAbsolutePath());
+
+                        // Enviar el correo
+                        Uri fileUri = FileProvider.getUriForFile(MainActivity.this, "com.example.lectordecedulas.fileprovider", file);
+                        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                        emailIntent.setType("vnd.android.cursor.dir/email");
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Reporte Completo de Almuerzos");
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, "Adjunto el reporte completo de almuerzos registrados.");
+                        emailIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                        try {
+                            startActivity(Intent.createChooser(emailIntent, "Enviar reporte por correo"));
+                            resultText.setText("Reporte listo, selecciona un correo");
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            resultText.setText("No hay apps de correo instaladas");
+                        }
+
+                    } catch (IOException e) {
+                        resultText.setText("Error al guardar el archivo: " + e.getMessage());
+                    }
+                } else {
+                    resultText.setText("Error al descargar el reporte: Código " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 resultText.setText("Error de conexión: " + t.getMessage());
             }
         });

@@ -21,6 +21,13 @@
         android:text="Verificar Cédula"
         android:layout_marginTop="10dp" />
 
+    <Button
+        android:id="@+id/reportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enviar Reporte por Correo"
+        android:layout_marginTop="10dp" />
+
     <TextView
         android:id="@+id/resultText"
         android:layout_width="wrap_content"
