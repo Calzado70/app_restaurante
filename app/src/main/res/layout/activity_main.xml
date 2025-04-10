@@ -1,39 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/medio">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/calzado" />
 
     <EditText
         android:id="@+id/cedulaInput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Escanea la cédula con el lector"
+        android:layout_height="51dp"
+        android:background="@drawable/bordes"
+        android:hint="@string/escanea_la_c_dula_con_el_lector"
         android:inputType="text"
-        android:maxLength="20" />
+        android:layout_marginTop="60sp"
+        android:maxLength="25"
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/verifyButton"
-        android:layout_width="wrap_content"
+        android:layout_width="177dp"
         android:layout_height="wrap_content"
-        android:text="Verificar Cédula"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:background="@drawable/botones"
+        android:text="@string/verificar_c_dula" />
 
     <Button
         android:id="@+id/reportButton"
-        android:layout_width="wrap_content"
+        android:layout_width="247dp"
         android:layout_height="wrap_content"
-        android:text="Enviar Reporte por Correo"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:background="@drawable/botones"
+        android:text="@string/enviar_reporte_por_correo"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/resultText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Resultado aparecerá aquí"
-        android:textSize="18sp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="50dp"
+        android:text="@string/resultado_aparecer_aqu"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="65sp" />
+
+
 
 </LinearLayout>

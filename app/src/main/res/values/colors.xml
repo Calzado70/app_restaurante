@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="girs">#515a5a</color>
+    <color name="claro">#85c1e9</color>
+    <color name="medio">#2980b9</color>
+    <color name="oscuro">#154360</color>
+    <color name="masomenos">#63b6b6</color>
+
+
 </resources>

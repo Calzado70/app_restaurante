@@ -1,6 +1,7 @@
 package com.example.lectordecedulas;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void verificarCedula(String cedula) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.22:8000/")
+                .baseUrl("http://192.168.1.13:8000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -85,17 +86,32 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Respuesta respuesta = response.body();
                     if (respuesta != null) {
-                        resultText.setText(respuesta.getMensaje());
+                        String mensaje = respuesta.getMensaje();
+                        resultText.setText(mensaje);
+
+                        // Aplicar colores según el mensaje
+                        if (mensaje.contains("puedes almorzar")) {
+                            resultText.setTextColor(Color.GREEN); // Verde para "puedes almorzar"
+                        } else if (mensaje.equals("Cédula no registrada o inactiva")) {
+                            resultText.setTextColor(Color.RED); // Rojo para "no registrado"
+                        } else if (mensaje.equals("Ya almorzaste hoy")) {
+                            resultText.setTextColor(Color.YELLOW); // Amarillo para "ya almorzaste"
+                        } else {
+                            resultText.setTextColor(Color.BLACK); // Color por defecto para otros casos
+                        }
+
                         cedulaInput.setText("");
                     }
                 } else {
                     resultText.setText("Error al conectar con el servidor");
+                    resultText.setTextColor(Color.BLACK);
                 }
             }
 
             @Override
             public void onFailure(Call<Respuesta> call, Throwable t) {
                 resultText.setText("Error de conexión: " + t.getMessage());
+                resultText.setTextColor(Color.BLACK);
             }
         });
     }
@@ -103,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     private void descargarYEnviarReporte() {
         resultText.setText("Descargando reporte...");
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.22:8000/")
+                .baseUrl("http://192.168.1.13:8000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

@@ -3,4 +3,5 @@
     <string name="escanea_la_c_dula_con_el_lector">Escanea la cédula con el lector</string>
     <string name="verificar_c_dula">Verificar Cédula</string>
     <string name="resultado_aparecer_aqu">Resultado aparecerá aquí</string>
+    <string name="enviar_reporte_por_correo">Enviar Reporte por Correo</string>
 </resources>
