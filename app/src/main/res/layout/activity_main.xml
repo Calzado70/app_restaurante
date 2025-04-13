@@ -8,7 +8,6 @@
     android:padding="16dp"
     android:background="@color/medio">
 
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
@@ -24,8 +23,12 @@
         android:inputType="text"
         android:layout_marginTop="60sp"
         android:maxLength="25"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:imeOptions="actionDone" />
 
+    <!-- Botón opcional, puedes eliminarlo si no lo necesitas -->
     <Button
         android:id="@+id/verifyButton"
         android:layout_width="177dp"
@@ -33,7 +36,8 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/black"
         android:background="@drawable/botones"
-        android:text="@string/verificar_c_dula" />
+        android:text="@string/verificar_c_dula"
+        android:focusable="false" /> <!-- Evita que robe el foco -->
 
     <Button
         android:id="@+id/reportButton"
@@ -42,18 +46,24 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/botones"
         android:text="@string/enviar_reporte_por_correo"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:focusable="false" /> <!-- Evita que robe el foco -->
 
     <TextView
         android:id="@+id/resultText"
         android:layout_width="wrap_content"
-        android:layout_height="387dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="@string/resultado_aparecer_aqu"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="80sp" />
 
-
+    <ProgressBar
+        android:id="@+id/loadingIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:visibility="gone" />
 
 </LinearLayout>
