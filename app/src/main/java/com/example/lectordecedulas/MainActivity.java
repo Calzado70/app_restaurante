@@ -2,6 +2,7 @@ package com.example.lectordecedulas;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 if (cedula.isEmpty()) {
                     resultText.setText("Por favor, escanea una cédula");
                     resultText.setTextColor(Color.BLACK);
-                    cedulaInput.requestFocus(); // Devolver foco
+                    cedulaInput.requestFocus();
                 } else {
                     verificarCedula(cedula);
                 }
@@ -102,20 +103,31 @@ public class MainActivity extends AppCompatActivity {
                         String mensaje = respuesta.getMensaje();
                         resultText.setText(mensaje);
 
+                        // Reproducir sonido según el resultado
+                        MediaPlayer mediaPlayer = null;
                         if (mensaje.contains("puedes almorzar")) {
                             resultText.setTextColor(Color.GREEN);
+                            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.acceso_consedido);
                         } else if (mensaje.equals("Cédula no registrada o inactiva")) {
                             resultText.setTextColor(Color.RED);
+                            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.acceso_negado);
                         } else if (mensaje.equals("Ya almorzaste hoy")) {
                             resultText.setTextColor(Color.YELLOW);
+                            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.duplicado);
                         } else {
                             resultText.setTextColor(Color.BLACK);
+                        }
+
+                        // Reproducir el sonido si existe
+                        if (mediaPlayer != null) {
+                            mediaPlayer.start();
+                            mediaPlayer.setOnCompletionListener(mp -> mp.release());
                         }
 
                         // Limpiar y devolver foco al EditText
                         cedulaInput.setText("");
                         cedulaInput.requestFocus();
-                        cedulaInput.selectAll(); // Seleccionar para el próximo escaneo
+                        cedulaInput.selectAll();
                     }
                 } else {
                     resultText.setText("Error al conectar con el servidor");
@@ -191,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     resultText.setText("Error al descargar el reporte: Código " + response.code());
                     resultText.setTextColor(Color.BLACK);
                 }
-                cedulaInput.requestFocus(); // Devolver foco después del reporte
+                cedulaInput.requestFocus();
             }
 
             @Override
