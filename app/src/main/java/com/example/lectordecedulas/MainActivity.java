@@ -6,12 +6,15 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,9 +37,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Configurar Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         cedulaInput = findViewById(R.id.cedulaInput);
         Button verifyButton = findViewById(R.id.verifyButton);
-        Button reportButton = findViewById(R.id.reportButton);
         resultText = findViewById(R.id.resultText);
         loadingIndicator = findViewById(R.id.loadingIndicator);
 
@@ -57,13 +63,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        reportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                descargarYEnviarReporte();
-            }
-        });
-
         cedulaInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -78,6 +77,21 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_send_report) {
+            descargarYEnviarReporte();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void verificarCedula(String cedula) {
@@ -103,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                         String mensaje = respuesta.getMensaje();
                         resultText.setText(mensaje);
 
-                        // Reproducir sonido según el resultado
                         MediaPlayer mediaPlayer = null;
                         if (mensaje.contains("puedes almorzar")) {
                             resultText.setTextColor(Color.GREEN);
@@ -118,13 +131,11 @@ public class MainActivity extends AppCompatActivity {
                             resultText.setTextColor(Color.BLACK);
                         }
 
-                        // Reproducir el sonido si existe
                         if (mediaPlayer != null) {
                             mediaPlayer.start();
                             mediaPlayer.setOnCompletionListener(mp -> mp.release());
                         }
 
-                        // Limpiar y devolver foco al EditText
                         cedulaInput.setText("");
                         cedulaInput.requestFocus();
                         cedulaInput.selectAll();

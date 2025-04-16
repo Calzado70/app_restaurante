@@ -4,66 +4,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp"
     android:background="@color/medio">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/calzado" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/medio"
+        app:titleTextColor="@color/black" />
 
-    <EditText
-        android:id="@+id/cedulaInput"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="51dp"
-        android:background="@drawable/bordes"
-        android:hint="@string/escanea_la_c_dula_con_el_lector"
-        android:inputType="text"
-        android:layout_marginTop="60sp"
-        android:maxLength="25"
-        android:textAlignment="center"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:imeOptions="actionDone" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
 
-    <!-- Botón opcional, puedes eliminarlo si no lo necesitas -->
-    <Button
-        android:id="@+id/verifyButton"
-        android:layout_width="177dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/black"
-        android:background="@drawable/botones"
-        android:text="@string/verificar_c_dula"
-        android:focusable="false" /> <!-- Evita que robe el foco -->
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/calzado" />
 
-    <Button
-        android:id="@+id/reportButton"
-        android:layout_width="247dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/botones"
-        android:text="@string/enviar_reporte_por_correo"
-        android:textColor="@color/black"
-        android:focusable="false" /> <!-- Evita que robe el foco -->
+        <EditText
+            android:id="@+id/cedulaInput"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:background="@drawable/bordes"
+            android:hint="@string/escanea_la_c_dula_con_el_lector"
+            android:inputType="text"
+            android:layout_marginTop="60sp"
+            android:maxLength="25"
+            android:textAlignment="center"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:imeOptions="actionDone" />
 
-    <TextView
-        android:id="@+id/resultText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/resultado_aparecer_aqu"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="80sp" />
+        <Button
+            android:id="@+id/verifyButton"
+            android:layout_width="177dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:background="@drawable/botones"
+            android:text="@string/verificar_c_dula"
+            android:focusable="false" />
 
-    <ProgressBar
-        android:id="@+id/loadingIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/resultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="@string/resultado_aparecer_aqu"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="80sp" />
 
+        <ProgressBar
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
 </LinearLayout>
