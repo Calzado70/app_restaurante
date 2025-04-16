@@ -107,13 +107,13 @@ public class MainActivity extends AppCompatActivity {
                         MediaPlayer mediaPlayer = null;
                         if (mensaje.contains("puedes almorzar")) {
                             resultText.setTextColor(Color.GREEN);
-                            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.acceso_consedido);
+                            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.concedido);
                         } else if (mensaje.equals("Cédula no registrada o inactiva")) {
                             resultText.setTextColor(Color.RED);
-                            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.acceso_negado);
+                            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.negado);
                         } else if (mensaje.equals("Ya almorzaste hoy")) {
                             resultText.setTextColor(Color.YELLOW);
-                            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.duplicado);
+                            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.duplicadomuje);
                         } else {
                             resultText.setTextColor(Color.BLACK);
                         }
